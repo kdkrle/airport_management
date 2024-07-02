@@ -77,6 +77,10 @@ first one is 'Information Selection', which contains buttons for selecting
 information, while the second one, 'Next Five Flights', is a display of the 
 next flights, with basic information about them.
 
+![1 - Main Screen](https://github.com/kdkrle/airport_management/assets/59825527/3d2e1faa-1b57-4087-a79e-2193a07c9a85)
+
+_Picture 1: Main Screen_
+
 At the bottom we have a button that closes the application and deletes the 
 data from the 'rezervacije' (reservations) table.
 
@@ -110,6 +114,10 @@ possible to enter other data before selecting the destination. Once the
 destination is selected, the departure selection field becomes available, 
 with the relevant departure times.
 
+![2 - Line Information](https://github.com/kdkrle/airport_management/assets/59825527/be9ed1fb-1762-4f4b-912d-b3fadcf0c32b)
+
+_Picture 2: Line Information_
+
 Since the departure time is also selected, the arrival time is 
 automatically entered and the other (Spinbox) fields are unlocked.
 
@@ -138,6 +146,10 @@ closed (if it is done by pressing the 'Zatvori' (Close) button). The data
 is created _interactively_, because not only the amount of data would have 
 to be much larger, but the booking data would be out of date when the 
 application is launched after a certain amount of time.
+
+![3 - Reservations](https://github.com/kdkrle/airport_management/assets/59825527/d25575c5-69f3-45ad-8b8a-5c0ac3ad0ee6)
+
+_Picture 3: Reservations_
 
 The screen that opens is divided into three basic categories. First we have 
 data related to the destination, then data related to passengers from the 
@@ -211,6 +223,10 @@ form opens. On this form, the new passenger's first and last name, passport
 number (not the full passport ID) and age are entered, and the nationality 
 is selected from the drop-down menu.
 
+![4 - New Passenger](https://github.com/kdkrle/airport_management/assets/59825527/9ef2c306-c07b-457a-90e5-892cfbd058e0)
+
+_Picture 4: New Passengers_
+
 By selecting the citizenship, the Passport ID is updated by writing the 
 abbreviation of the country at the beginning.
 
@@ -234,12 +250,20 @@ flights: flight number, type of aircraft, name of the airport of arrival,
 time of departure, duration of the flight and the basic price of the flight 
 ticket.
 
+![5 - Flight List](https://github.com/kdkrle/airport_management/assets/59825527/eb724bac-b63b-4c3e-a63f-274f2cbf2b2a)
+
+_Picture 5: List of Flights Until the End of the Day_
+
 ## 5.5 Passengers
 
 This opens a window with two separate sections. The first section refers to 
 the possibility of exporting a file, with all data about passengers from 
 the table 'putnici' (passengers). By selecting the option, export is done 
 in Excel, CSV and JSON formats.
+
+![6 - Passenger Information](https://github.com/kdkrle/airport_management/assets/59825527/2b8054c0-78e6-4b01-9696-fd383cd26785)
+
+_Picture 6: Passenger Information_
 
 In the field for entering the name of the file, enter the name with which 
 we want to name that file, without the need to enter the extension. After a 
@@ -255,6 +279,22 @@ data in 'bar' or 'pie' form. The number of displayed data determines how
 many values will be displayed on the chart. All choices work _together_, 
 and we get the result by pressing the 'Primeni' (Apply) button.
 
+![6 1 - Most Passengers Country](https://github.com/kdkrle/airport_management/assets/59825527/de69e101-e92c-4c0a-9f8a-555be8a373df)
+
+_Picture 7: Countries With the Most Passengers (bar)_
+
+![6 2 - Most Flights Passsengers](https://github.com/kdkrle/airport_management/assets/59825527/9c66aa6e-790d-41d9-880e-02197c02530e)
+
+_Picture 8: Passengers With the Most Flights_
+
+![6 3 - Highest Mileage Passengers](https://github.com/kdkrle/airport_management/assets/59825527/83cb96c3-e3a4-4cf4-95c7-2f5b7bc21f7d)
+
+_Picture 9: Passengers With the Highest Mileage_
+
+![6 4 - Most Passengers Country (pie)](https://github.com/kdkrle/airport_management/assets/59825527/93e1c6c0-1bdd-4bd2-a26b-47d771f48315)
+
+_Pictures 10: Countries With the Most Passengers (pie)_
+
 ## 5.6 Fleet data
 
 Pressing this button on the main screen opens a new one with a display of 
@@ -263,12 +303,20 @@ includes: the type of aircraft, how many aircraft of that type there are in
 total, their length, wingspan, seat capacity, cruise speed and altitude at 
 which they fly.
 
+![7 - Fleet Data](https://github.com/kdkrle/airport_management/assets/59825527/8aa32478-dbf6-44a2-bd6e-5b1cfa127201)
+
+_Picture 11: Fleet data_
+
 ## 5.7 Destination List
 
 At the bottom is a button for a list of destinations. By opening a new 
 window, tabular data on the destinations to which you fly are obtained with 
 the name of the airport where you land, the departure, the duration of the 
 flight and the basic price of the ticket.
+
+![8 - Destination List](https://github.com/kdkrle/airport_management/assets/59825527/a722e0d3-a41e-474c-8e88-23805b4e93f9)
+
+_Picture 12: Destination List_
 
 The obtained data can be sorted in three ways: by destinations, by 
 departure time and by flight duration.
@@ -280,3 +328,19 @@ Also, it is possible to graphically display data on flight duration and
 price, in such a way as to obtain a bar chart of 5 destinations with the 
 longest or shortest flight length, as well as 5 destinations with the 
 highest or lowest ticket price.
+
+![8 1 - Longest Flights](https://github.com/kdkrle/airport_management/assets/59825527/7e2f635a-d1af-46d6-a080-9b1b6a0e5720)
+
+_Picture 13: Longest Flights_
+
+![8 2 - Shortest Flights](https://github.com/kdkrle/airport_management/assets/59825527/3730ed3c-3677-4873-b0cb-8ed124af5469)
+
+_Picture 14: Shortest Flights_
+
+![8 3 - Highest Prices](https://github.com/kdkrle/airport_management/assets/59825527/9552c0e9-7f93-4261-8333-aebfd3c72959)
+
+_Picture 15: Highest Prices_
+
+![8 4 - Lowest Prices](https://github.com/kdkrle/airport_management/assets/59825527/6c5ed38f-b981-4c9d-887c-fe2c569eb33a)
+
+_Picture 16: Lowest Prices_
