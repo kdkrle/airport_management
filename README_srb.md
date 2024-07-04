@@ -156,8 +156,8 @@ nalaženje slobodnih mesta za ranije datume, a veća za kasnije.
 Ukoliko slobodnih mesta nema, potrebno je izabrati novi datum ili novo 
 vreme, dok ne dobijemo odgovor da slobodnih mesta ima.
 
-After the seat numbering is selected, a drop-down menu becomes available to 
-select passengers already in the database.
+Pošto se izabere numeracija sedišta, otvara se i padajući meni za izbor 
+putnika koji su već u bazi podataka.
 
 Prilikom izbora nove destinacije, svi podaci se, osim datuma i izbora za 
 povratnu kartu, resetuju.
