@@ -92,11 +92,11 @@ name of each button.
 #### 5.1.2 Next Five Flights
 
 The second part of the screen shows information about the next 5 flights. 
-First, the type of aircraft for that flight is shown, with its picture, 
-followed by information about the flight number, the destination, the name 
-of the airport, and the time of departure.
+First, it is shown the aircraft type for that specific flight, with its 
+picture, followed by information about the flight number, the destination, 
+the name of the airport, and the time of departure.
 
-Data is changed interactively, i.e. when it's time for the flight to take off,
+Data is changed interactively, i.e. when it's time for the plane to take off,
 the data is updated and a new list is created.
 
 NOTE: At each new drawing of elements on the form on which the next 5 
@@ -151,10 +151,10 @@ application is launched after a certain amount of time.
 
 _Picture 3: Reservations_
 
-The screen that opens is divided into three basic categories. First we have 
-data related to the destination, then data related to passengers from the 
-database, and finally there is a part for entering new passengers who are 
-not in the database.
+The screen that has been opened is divided into three basic categories. 
+First we have data related to the destination, then data related to 
+passengers from the database, and finally there is a part for entering new 
+passengers who are not in the database.
 
 #### 5.3.1 Destination
 
@@ -174,8 +174,8 @@ for earlier dates and higher for later ones.
 If there are no vacant seats, it is necessary to choose a new date or a new 
 time, until we receive an answer that there are vacant seats.
 
-Pošto se izabere numeracija sedišta, otvara se i padajući meni za izbor 
-putnika koji su već u bazi podataka.
+After the seat numbering is selected, a drop-down menu becomes available to 
+select passengers who are already in the database.
 
 When choosing a new destination, all data is reset, except for the date and 
 selection for the return ticket.
@@ -199,7 +199,7 @@ is _not available_ until all required data has been entered.
 
 _Discounts_:
 
-As mentioned earlier, children aged 3-11 years have a 5% discount, and 
+As mentioned before, children aged 3-11 years have a 5% discount, and 
 babies aged 1 or 2 years have a 15% discount.
 
 It is possible for passengers to get a discount on the mileage they have 
@@ -207,9 +207,9 @@ traveled with this company. Those who have traveled more than 10,000 km get
 a 5% discount, and those who have traveled more than 20,000 km get a 10% 
 discount. However, this discount does not last permanently. The discount 
 can be used if it has not already been used, and whether this has happened 
-is shown by the value from the 'iskoriscen popust' (discount used) column in 
-the 'putnici' (passengers) table. The used discount is displayed on the screen
-_as if it doesn't exist_ (discount value is 0).
+we can see by the value from the 'iskoriscen popust' (discount used) column 
+in the 'putnici' (passengers) table. The used discount is displayed on the 
+screen _as if it doesn't exist_ (discount value is 0).
 
 A discount is also available on the return ticket. It amounts to 15% on 
 double the basic price of the ticket.
@@ -265,8 +265,8 @@ in Excel, CSV and JSON formats.
 
 _Picture 6: Passenger Information_
 
-In the field for entering the name of the file, enter the name with which 
-we want to name that file, without the need to enter the extension. After a 
+In the field for entering the name of the file, we enter the name we want 
+to name that file with, without the need to enter the extension. After a 
 successful export, we receive a notification about the performed operation, 
 and the value in the input field is deleted.
 
