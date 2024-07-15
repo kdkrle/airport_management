@@ -1,5 +1,4 @@
 import datetime as dt
-
 import psycopg2 as pg
 import pandas as pd
 from tkinter import messagebox
@@ -7,7 +6,7 @@ import matplotlib.pyplot as plt
 
 
 class Avioni:
-    """Klasa za manipulaciju podacima iz tabele 'avioni'."""
+    """Managing data from the 'avioni' table."""
     
     def __init__(self):
         self.con = pg.connect(
@@ -20,13 +19,13 @@ class Avioni:
         self.avioni_df = None
 
     def avioni_ucitavanje(self):
-        """Osvežavanje podataka tabele 'avioni'."""
+        """Refreshing the 'avioni' table data."""
     
         self.avioni_df = pd.read_sql_query("SELECT * FROM avioni", self.con)
 
 
 class Linije:
-    """Klasa za upravljanje podacima iz tabele 'linije'."""
+    """Managing data from the 'linije' table."""
     
     def __init__(self):
         self.con = pg.connect(
@@ -39,28 +38,28 @@ class Linije:
         self.linije_df = None
     
     def linije_ucitavanje(self):
-        """Osvežavanje podataka tabele 'linije'."""
+        """Refreshing the 'linije' table data."""
     
         self.linije_df = pd.read_sql_query("SELECT * FROM linije", self.con)
     
     def time_sort(self):
-        """Tabela 'linije' sortirana po polascima."""
+        """Table 'linije' sorted by departures."""
         time_sort_df = self.linije_df.sort_values(by=["polazak"])
         return time_sort_df
     
     def indeksi_narednih_letova(self):
-        """Dobijanje indeksa pet narednih letova iz tabele 'linije'."""
+        """Getting the index of the next five flights from the 'linije'
+        table."""
         
-        #Lista indeksa prethodno sortirane tabele.
+        # Index list of previously sorted table
         sortirana_tbl = linije.time_sort()
         sort_indices = sortirana_tbl.polazak.index.to_list()
         
-        #Lista je udvostručena da bi, ukoliko se dođe do samog kraja liste,
-        # prešla na indekse s vrha liste - da ne bismo dobili informacije za
-        # manje od 5 letova.
+        # The list is doubled so that we do not get information for less
+        # than 5 flights, if we reach the very end of the list
         double_sort_indices = sort_indices * 2
         
-        #Dobijanje željenih indeksa u formi liste.
+        # Obtaining the desired indexes in the form of a list
         for i in range(len(double_sort_indices)):
             idx = double_sort_indices[i]
             current_time_string = dt.datetime.now().strftime("%H:%M")
@@ -72,13 +71,14 @@ class Linije:
                 return required_indices
     
     def preostali_letovi(self):
-        """Dobijanje podataka za letove do kraja dana."""
+        """Getting data of flights to the end of the day."""
         
         tabela_sort = self.time_sort()
-        #Indeksi sortirane tabele po vremenu polaska.
+        
+        # Sorted table indexes by departure time
         indeksi_sort = tabela_sort.index.to_list()
         
-        #Dobijanje trenutnog vremena.
+        # Getting the current time
         trenutno_vreme_str = dt.datetime.now().strftime("%H:%M")
         trenutno_vreme = dt.datetime.strptime(trenutno_vreme_str,
                                                     "%H:%M").time()
@@ -92,7 +92,7 @@ class Linije:
                 return preostali_letovi_df
     
     def lista_destinacija(self):
-        """Kreiranje sortirane liste destinacija narednih letova."""
+        """Creating a sorted list of destinations for the next flights."""
         
         dest_sort_df = self.linije_df.sort_values(by=["destinacija"])
         dest_list = []
@@ -103,7 +103,7 @@ class Linije:
 
 
 class Putnici:
-    """Klasa za upravljanje podacima iz tabele 'putnici'."""
+    """Managing data from the 'putnici' table."""
     
     def __init__(self):
         self.con = pg.connect(
@@ -116,13 +116,12 @@ class Putnici:
         self.putnici_df = None
     
     def putnici_ucitavanje(self):
-        """Osvežavanje podataka tabele 'putnici'."""
+        """Refreshing the 'putnici' table data."""
         
         self.putnici_df = pd.read_sql_query("SELECT * FROM putnici", self.con)
     
     def eksportovanje(self, rb_vrednost, entry_polje):
-        """Eksportovanje fajla u jednom od datih formata u zavisnosti od
-        izbora."""
+        """File export in one of the given formats depending on the choice."""
         if not entry_polje.get():
             return messagebox.showerror(
                 title="Greška",
@@ -140,9 +139,9 @@ class Putnici:
         )
     
     def graficki_prikaz(self, tip_var, nacin_var, broj_var):
-        """Grafičko prikazivanje nekih podataka vezanih za putnike."""
+        """Graphical display of some data related to passengers."""
 
-        #Broj podataka za prikazivanje
+        # Number of data to display
         if broj_var.get() == "1":
             broj = 5
         elif broj_var.get() == "2":
@@ -150,10 +149,10 @@ class Putnici:
         else:
             broj = 10
             
-        # Vrednost po kojoj se vrši poređenje podataka.
+        # The value by which the data is compared
         if tip_var.get() == "1":
     
-            #Najzastupljenije državljanstvo.
+            # Most common citizenship
             najzastupljeniji_df = \
                 self.putnici_df.drzavljanstvo.value_counts().head(broj)
             x_values = list(najzastupljeniji_df.index)
@@ -164,7 +163,8 @@ class Putnici:
             color_bar = "darkorange"
             color_title = "darkred"
         elif tip_var.get() == "2":
-            #Sortiranje podataka po kriterijumu broja letova.
+            
+            # Sorting data by number of flights
             ukupno_letova = self.putnici_df.sort_values(
                 by=["broj ranijih letova"],
                 ascending=False
@@ -190,7 +190,7 @@ class Putnici:
             color_bar = "silver"
             color_title = "mediumblue"
             
-        #Vrsta grafičkog prikaza.
+        # Type of graphic display
         if nacin_var.get() == "1":
             plt.bar(x_values, y_values, color=color_bar)
             plt.title(naslov, fontdict={"family": "serif", "color":
@@ -231,7 +231,7 @@ class Putnici:
 
 
 class Rezervacije:
-    """Klasa za manipulaciju podacima iz tabele 'rezervisanje'."""
+    """Managing data from the 'rezervacije' table."""
     
     def __init__(self):
         self.con = pg.connect(
@@ -244,12 +244,13 @@ class Rezervacije:
         self.rezervacije_df = None
         
     def rezervacije_ucitavanje(self):
-        """Učitavanje podataka tabele 'rezervisanje'."""
+        """Refreshing the 'rezervacije' table data."""
         
         self.rezervacije_df = pd.read_sql_query("SELECT * FROM rezervacije",
                                                 self.con)
+        
     def unos_u_tabelu(self, dest, date, polaz, sed, pasos, povrat, cena):
-        """Unos prikazanih podataka u tabelu 'rezervisanje'."""
+        """Entering the displayed data into the 'rezervacije' table."""
         
         cursor = self.con.cursor()
         
@@ -267,8 +268,8 @@ class Rezervacije:
         cursor.close()
         
     def brisanje_rezervacija(self):
-        """Zbog datuma koji se stalno menja tabela 'rezevacije' se briše
-        nakon svakog pokretanja programa."""
+        """Because of the constantly changing date, the 'reservation' table is
+        deleted after each start of the application."""
         
         cursor = self.con.cursor()
         sql_brisanje = "TRUNCATE rezervacije"
