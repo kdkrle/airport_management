@@ -13,7 +13,7 @@ root.resizable(0, 0)
 
 
 def dimenzije_slike(path, length, height):
-    """Menjanje dimenzija slika."""
+    """Changing the dimensions of the image."""
     
     img = Image.open(path)
     img_resize = img.resize((length, height))
@@ -21,19 +21,19 @@ def dimenzije_slike(path, length, height):
 
 
 def ciscenje_frejma(frame):
-    """Funkcija koja briše sve elemente koje je dati frejm primio."""
+    """Delete all elements in a given frame."""
     
     for element in frame.winfo_children():
         element.destroy()
 
 
 def azuriranje_letova():
-    """Ažuriranje spiska narednih letova."""
+    """Updating the list of upcoming flights."""
     
     ciscenje_frejma(letovi_frm)
     
     for i in range(len(linije.indeksi_narednih_letova())):
-        # Podaci iz DataFrama koji su nam potrebni.
+        # Data from the database that we need
         idx = linije.indeksi_narednih_letova()[i]
         broj_leta = linije.linije_df["broj leta"][idx]
         destinacija = linije.linije_df.destinacija[idx]
@@ -42,7 +42,7 @@ def azuriranje_letova():
         polazak = linije.linije_df.polazak[idx]
         polazak_str = polazak.strftime("%H:%M")
 
-        # Smeštanje elemenata na formu.
+        # Placing elements on the form
         jedan_let_frm = ttk.Frame(letovi_frm)
         jedan_let_frm.grid(column=1, row=i, padx=5, pady=5)
 
@@ -63,7 +63,7 @@ def azuriranje_letova():
         ttk.Label(jedan_let_frm, text=polazak_str).grid(column=2, row=3,
                                                         sticky=W)
 
-        # Slika aviona.
+        # Airplane pictures
         if tip_aviona == "AIRBUS A 330-200":
             slika = dimenzije_slike("assets/Airbus_A_330-200.png", 150, 52)
         elif tip_aviona == "AIRBUS A 320":
@@ -73,7 +73,7 @@ def azuriranje_letova():
         elif tip_aviona == "ATR 72-600":
             slika = dimenzije_slike("assets/Atr_72_600.png", 150, 52)
 
-        # Smeštanje slike na formu.
+        # Placing images on the form
         slika_lbl = ttk.Label(letovi_frm, image=slika,
                               text=f"Tip aviona: {tip_aviona}", compound="top")
         slika_lbl.slika = slika
@@ -83,19 +83,21 @@ def azuriranje_letova():
 
 
 def sortiranje(kriterijum, tv, sb, main):
-    """Sortiranje izabranih kolona po izabranom kriterijumu i kreiranje
-    treeview elementa na osnovu istog."""
+    """Sorting the selected columns according to the selected criteria and
+    creating treeview elements based on it."""
     
+    # Columns
     kolone = ["destinacija", "naziv aerodroma", "polazak", "trajanje leta",
               "osnovna cena karte"]
     
-    # Dobijanje željenog spiska kolona i sortiranih podataka.
+    # Getting the required list of columns and sorted data.
     krit = kolone.pop(kolone.index(kriterijum))
     kolone.insert(0, krit)
 
     df = linije.linije_df.loc[:, kolone].sort_values(by=[kriterijum])
     
-    #Uklanjanje prethodnog treeview i scrollbar elementa i izgradnja novih.
+    # Removing the previous treeview and scrollbar elements and building new
+    # ones
     tv.grid_remove()
     sb.grid_remove()
     
@@ -107,14 +109,14 @@ def sortiranje(kriterijum, tv, sb, main):
     )
     
     if kriterijum == "destinacija":
-        # Imena zaglavlja
+        # Header names
         tv.heading(kolone[0], text="Destinacija")
         tv.heading(kolone[1], text="Naziv aerodroam")
         tv.heading(kolone[2], text="Polazak")
         tv.heading(kolone[3], text="Trajanje")
         tv.heading(kolone[4], text="Cena")
 
-        # Širina kolone i pozicija teksta u njoj.
+        # Column width and text position in it
         tv.column(kolone[0], width=100, anchor=W)
         tv.column(kolone[1], width=170, anchor=W)
         tv.column(kolone[2], width=70, anchor="center")
@@ -122,14 +124,14 @@ def sortiranje(kriterijum, tv, sb, main):
         tv.column(kolone[4], width=100, anchor=E)
     
     elif kriterijum == "polazak":
-        # Imena zaglavlja
+        # Header names
         tv.heading(kolone[0], text="Polazak")
         tv.heading(kolone[1], text="Destinacija")
         tv.heading(kolone[2], text="Naziv aerodroam")
         tv.heading(kolone[3], text="Trajanje")
         tv.heading(kolone[4], text="Cena")
 
-        # Širina kolone i pozicija teksta u njoj.
+        # Column width and text position in it
         tv.column(kolone[0], width=70, anchor="center")
         tv.column(kolone[1], width=100, anchor=W)
         tv.column(kolone[2], width=170, anchor=W)
@@ -137,14 +139,14 @@ def sortiranje(kriterijum, tv, sb, main):
         tv.column(kolone[4], width=100, anchor=E)
         
     else:
-        # Imena zaglavlja
+        # Header names
         tv.heading(kolone[0], text="Trajanje")
         tv.heading(kolone[1], text="Destinacija")
         tv.heading(kolone[2], text="Naziv aerodroam")
         tv.heading(kolone[3], text="Polazak")
         tv.heading(kolone[4], text="Cena")
 
-        # Širina kolone i pozicija teksta u njoj.
+        # Column width and text position in it
         tv.column(kolone[0], width=70, anchor="center")
         tv.column(kolone[1], width=100, anchor=W)
         tv.column(kolone[2], width=170, anchor=W)
@@ -154,12 +156,12 @@ def sortiranje(kriterijum, tv, sb, main):
     tv.grid(column=0, row=0, padx=10, pady=10, ipadx=5, ipady=5,
             columnspan=4)
     
-    # Ubacivanje podataka u tabelu.
+    # Inserting data into a table
     for i in range(len(df)):
         indeksi = df.index.to_list()
         jedan_red = df.loc[indeksi[i]].to_list()
 
-        # Redosled potrebnih indeksa.
+        # Order of required indexes
         if kriterijum == "destinacija":
             idxs = [2, 3, 4]
         elif kriterijum == "polazak":
@@ -172,7 +174,7 @@ def sortiranje(kriterijum, tv, sb, main):
         jedan_red[idxs[2]] = "%0.2f" % (float(jedan_red[idxs[2]]))
         tv.insert("", END, values=jedan_red)
 
-    # Postavljanje skrolbara za Treeview.
+    # Setting of the Treeview scrollbar
     sb = ttk.Scrollbar(
         main,
         orient="vertical",
@@ -183,7 +185,7 @@ def sortiranje(kriterijum, tv, sb, main):
 
 
 def dest_eksport(df, rb_vrednost):
-    """Eksportovanje fajla po destinacijama."""
+    """File export by destination."""
     
     if rb_vrednost.get() == "1":
         df.to_excel("spisak_destinacija.xlsx")
@@ -198,8 +200,7 @@ def dest_eksport(df, rb_vrednost):
 
 
 def destinacije_graf(tip_var, krit_var, df):
-    """Grafički prikaz najvećih i najmanjih vrednosti cena i trajanja leta
-    destinacija."""
+    """Graphic display of the highest and lowest prices and flight duration."""
     
     kolone_lista = df.columns.to_list()
     
@@ -210,7 +211,7 @@ def destinacije_graf(tip_var, krit_var, df):
                 kolone_lista].sort_values(by=["osnovna cena karte"],
                                           ascending=False)
     
-    #Podaci destinacija i indeksa za najduže i najkraže letove.
+    # Destination and index data for the longest and shortest flights
     dest_duzina = []
     sortirani_d_indeksi = []
     for i in range(trajanje_sort.shape[0]):
@@ -225,7 +226,7 @@ def destinacije_graf(tip_var, krit_var, df):
     najkraci_letovi_destinacije = list(reversed(dest_duzina))[0:5]
     najkraci_letovi_indeksi = list(reversed(sortirani_d_indeksi))[0:5]
 
-    # Podaci destinacija i indeksa za najveće i najniže cene letova.
+    # Destination and index data for the highest and lowest flight prices
     dest_cena = []
     sortirani_c_indeksi = []
     for i in range(cene_sort.shape[0]):
@@ -240,10 +241,10 @@ def destinacije_graf(tip_var, krit_var, df):
     najmanje_cene_destinacije = list(reversed(dest_cena))[0:5]
     najmanje_cene_indeksi = list(reversed(sortirani_c_indeksi))[0:5]
     
-    #Vrednost x_label je ista za sve.
+    # The x_label value is the same for all
     x_label = "Destinacija"
     
-    # Vrednosti izbora tipa podataka (trajanje leta/cena karte):
+    # Values for data type selection (flight duration/ticket price)
     if tip_var.get() == "1":
         if krit_var.get() == "1":
             x_values = najduzi_letovi_destinacije
@@ -312,7 +313,7 @@ def destinacije_graf(tip_var, krit_var, df):
 
 
 def rez_dest_izbor():
-    """Izbor destinacije koju želimo da rezervišemo."""
+    """Selection of the destination we want to book."""
     dest_lista = []
     for i in range(linije.linije_df.shape[0]):
         destin = linije.linije_df.destinacija.iloc[i]
@@ -322,10 +323,10 @@ def rez_dest_izbor():
 
 
 def linije_info():
-    """Prikaz podataka o destinacijama, dužini leta i cenama."""
+    """Display of data on destinations, flight length and prices."""
     
     def line_dest_selected(event):
-        """Promene nakon unošenja destinacije."""
+        """Changes after entering the destination."""
         dest_select = destinacije_cb.get()
         polazak_cb.set("")
         odrasli_sb.config(state="disabled")
@@ -343,11 +344,10 @@ def linije_info():
         polazak_cb.config(state="normal", values=lista_polazaka)
         
     def line_polazak_selected(event):
-        """Promene koje se dešavaju nakon unošenja polaska za određenu
-        destinaciju."""
+        """Changes that occur after entering a departure for a specific
+        destination."""
         
-        #Vrednosti za destinaciju i polazak i setovanje ostalih na početne
-        # vrednosti.
+        #Values for destination and departure and reset of others
         dest = destinacije_cb.get()
         polaz = polazak_cb.get()
         polazak = dt.datetime.strptime(polaz, "%H:%M").time()
@@ -369,7 +369,8 @@ def linije_info():
         dolazak_val_lbl.config(text=dolazak_str)
     
     def putnici_cena(event):
-        """Cena za određeni broj putnika, uz popuste za mlađe uzraste."""
+        """Price for a certain number of passengers, with discounts for
+        younger categories."""
 
         dest = destinacije_cb.get()
         cena_za_dest = linije.linije_df["osnovna cena karte"][
@@ -383,7 +384,7 @@ def linije_info():
         ukupna_cena_vrednost.config(text="%0.2f" % ukupna_cena)
 
 
-    #Deo za destinacije, polazak i dolazak.
+    # Section for destinations, departure and arrival
     linije_tl = Toplevel(root)
     linije_tl.title("Destinacije - dužina letenja - cene")
     linije_tl.attributes("-topmost", "true")
@@ -422,7 +423,7 @@ def linije_info():
                                 relief="solid", anchor=E)
     dolazak_val_lbl.grid(column=2, row=1, padx=5, pady=5, sticky=W)
 
-    #Deo za cene.
+    # Pricing section
     cene_frm = ttk.LabelFrame(linije_tl, text="Cena leta")
     cene_frm.grid(column=0, row=1, padx=10, pady=10)
     
@@ -468,11 +469,11 @@ def linije_info():
 
 
 def rezervisanje():
-    """Rezervacija karata. Izbor destinacije, podaci o putniku i cena
-    karata."""
+    """Ticket reservation. Destination selection, passenger information and
+    ticket price."""
 
     def cb_dest_selected(event):
-        """Promene koje se dešavaju nakon izbora destinacije u Comboboxu."""
+        """Changes that occur after selecting a destination in the Combobox."""
         izabrana_dest = rez_dest_cb.get()
         rez_polazak_value.set("")
         rez_sediste_value.set("")
@@ -493,7 +494,7 @@ def rezervisanje():
         rez_polazak_value.config(state="normal", values=lista_pol)
         
     def cb_polazak_selected(event):
-        """Promene koje se dešavaju nakon izbora vremena polaska."""
+        """Changes that occur after selecting a departure time."""
         rez_sediste_value.set("")
         var_popunjenost.set("")
         rez_pasos_cb.set("")
@@ -508,18 +509,18 @@ def rezervisanje():
         rez_sediste_value.config(state="normal", values=preostala_mesta)
     
     def cb_sediste_selected(event):
-        """Promene koje se dešavaju nakon izbora sedišta."""
+        """Changes that occur after seat selection."""
         id_pasosa = putnici.putnici_df["broj pasosa"].to_list()
         id_pasosa.sort()
         rez_pasos_cb.config(state="normal", values=id_pasosa)
     
     def cb_pasos_selected(event):
-        """Nakon izbora ID pasoša, unošenje ostalih podataka o putniku,
-        kao i cene karte."""
+        """After selecting the passport ID, entering other information about
+         the passenger, as well as the ticket price."""
         
         rezervisi_btn.config(state="normal")
         
-        #Podaci za unos.
+        # Input data
         podaci_putnika = putnici.putnici_df[
             putnici.putnici_df["broj pasosa"] == rez_pasos_cb.get()]
         ime = podaci_putnika.iloc[0][1]
@@ -528,7 +529,7 @@ def rezervisanje():
         popust = podaci_putnika.iloc[0][6]
         iskoriscen = podaci_putnika.iloc[0][7]
         
-        #Cena karte.
+        # Ticket price
         if rez_dest_cb.get():
             osnovna_cena = linije.linije_df["osnovna cena karte"][
                 linije.linije_df.destinacija == rez_dest_cb.get()]
@@ -542,8 +543,8 @@ def rezervisanje():
         rez_drzava_value.config(text=drzava)
         rez_starost_value.config(text=godine)
         
-        #Proračuni za cenu s popustom i povratne karte (15% popusta za
-        # povratak, tj. povratna = 1.85 * osnovna cena).
+        # Calculations for discount price and return tickets (15% return
+        # discount, i.e. return = 1.85 * base price)
         if iskoriscen:
             rez_popust_value.config(text=0)
             if var_chbtn.get() == 0:
@@ -562,9 +563,9 @@ def rezervisanje():
                 ukupna_cena_value.config(text=cena_s_popustom_str)
     
     def calendar_selected(event):
-        """Promene nakon promene vrednosti datuma."""
+        """Changes after changing the date value."""
         
-        #Provera da li se bira datum pre današnjeg dana.
+        # Checking if a date before today is selected
         if calend.get_date() < dt.date.today():
             messagebox.showerror(title="Greška",
                 message="Ne možete da birate datume pre današnjeg dana.")
@@ -576,8 +577,8 @@ def rezervisanje():
             
     
     def chbtn_change():
-        """Promene koje se dešavaju nakon promene stanja Checkbox elementa,
-        koji ukazuje da li se uzima povratna karta ili ne."""
+        """Changes that occur after changing the state of the Checkbox
+        element for taking a return ticket."""
         
         trenutna_cena = float(ukupna_cena_value.cget("text"))
         if var_chbtn.get() == 0:
@@ -588,12 +589,11 @@ def rezervisanje():
             ukupna_cena_value.config(text=cena)
     
     def prazna_mesta(ukupan_broj, min_v, max_v):
-        """Funkcija za izračunavanje liste slobodnih mesta za zadate
-        parametre."""
+        """Calculation of the list of free seats for given parameters."""
         
         sva_sedista = [x for x in range(1, ukupan_broj + 1)]
         
-        #Procentualna popunjenost aviona.
+        # Aircraft percentage occupancy
         popuna_pct = random.randint(min_v, max_v)
         broj_preostalih_mesta = round((100 - popuna_pct) /  100 * ukupan_broj)
         preostala_mesta = random.sample(sva_sedista, k=broj_preostalih_mesta)
@@ -601,8 +601,7 @@ def rezervisanje():
         return preostala_mesta
     
     def popunjenost(var):
-        """Interaktivno generisanje popunjenosti i praznih mesta (zbog
-        obimnosti neophodnih podataka)."""
+        """Interactive generating of occupancy and free seats."""
 
         dt_sada = dt.date.today()
         dt_izabran = calend.get_date()
@@ -611,14 +610,14 @@ def rezervisanje():
         polaz = rez_polazak_value.get()
         polaz_dt = dt.datetime.strptime(polaz, "%H:%M").time()
         
-        #Tip aviona za izabrane podatke.
+        # Aircraft type for selected data
         avion_tip = linije.linije_df[
             "tip aviona"][(linije.linije_df.destinacija == dest) & (
                 linije.linije_df.polazak == polaz_dt)]
         avion_idx = avion_tip.index[0]
         avion = avion_tip[avion_idx]
         
-        #Broj sedišta avioan.
+        # Aircraft seat number
         ukupno_sedista = avioni.avioni_df["kapacitet sedista"][
             avioni.avioni_df.tip == avion]
         ukupno_idx = ukupno_sedista.index[0]
@@ -669,7 +668,7 @@ def rezervisanje():
         return preostala_sedista
 
     def unos_rezervacije():
-        """Unos podataka u tabelu 'rezervisanje'."""
+        """Entering data into the 'rezervacije' table."""
         
         dest_rez = rez_dest_cb.get()
         date_rez = calend.get_date()
@@ -688,12 +687,12 @@ def rezervisanje():
                                   cena_rez)
     
     def novi_putnik():
-        """Otvaranje novog prozora za unos informacija o putniku koji nije u
-        bazi podataka"""
+        """Opening a new window for entering data about a passenger who is
+        not in the database."""
 
         def max_len_digit(input):
-            """Ograničavanje dužine unosa u polje za broj pasoša i
-            mogućnost da se samo koriste brojne vrednosti."""
+            """Limitation of input length and character type in the passport
+             number field."""
             
             if input.isdigit() and len(input) <= 10:
                 novi_ID_pass.config(text=input)
@@ -704,7 +703,7 @@ def rezervisanje():
                 return False
         
         def cb_drz_select(event):
-            """Ubacivanje skraćenice države u ID pasoša."""
+            """Inserting the country abbreviation into the passport ID."""
             
             for drzava in SHORT_COUNTRY_DICT:
                 if drzava == novi_drzava_cb.get():
@@ -712,8 +711,8 @@ def rezervisanje():
             novi_ID_abbr.config(text=skracenica)
 
         def unesi_novog_putnika():
-            """Ubacivanje novog putnika, s relevantnim podacima, u tabelu
-            'putnici'."""
+            """Inserting a new passenger, with relevant data, into the
+            'putnici' table."""
             
             if not novi_ime_entry.get():
                 return messagebox.showerror(
@@ -833,7 +832,7 @@ def rezervisanje():
     rezervacije_tl.title("REZERVACIJE KARATA")
     rezervacije_tl.resizable(0, 0)
     
-    #Deo za destinaciju i datum putovanja.
+    # Section for destination and travel date
     rez_dest_frm = ttk.LabelFrame(rezervacije_tl, text="Destinacija")
     rez_dest_frm.grid(column=0, row=0, columnspan=2, padx=10, pady=10,
                       sticky=EW)
@@ -886,12 +885,11 @@ def rezervisanje():
     rez_popunjeno_value.grid(column=4, row=1, padx=5, pady=5, sticky=W)
 
     
-    #Deo za informacije o putniku.
+    # Passenger information section
     rez_putnik_frm = ttk.LabelFrame(rezervacije_tl, text="Putnik")
     rez_putnik_frm.grid(column=0, row=1, columnspan=2, padx=10, pady=10,
                         sticky=EW)
     
-    #Deo za putnika i informacije o njemu.
     rez_pasos_title = ttk.Label(rez_putnik_frm, text="ID pasoša")
     rez_pasos_title.grid(column=0, row=0, padx=5, pady=5, sticky=W)
     rez_pasos_cb = ttk.Combobox(rez_putnik_frm, width=15, state="disabled")
@@ -948,7 +946,7 @@ def rezervisanje():
     )
     rezervisi_btn.grid(column=5, row=2, padx=5, pady=15, sticky=E)
     
-    #Deo za novog putnika i ukupnu cenu karata.
+    # Sections for the new passenger and the total price of the tickets
     novi_putnik_frm = ttk.LabelFrame(rezervacije_tl, text="Novi putnik")
     novi_putnik_frm.grid(column=0, row=2, padx=10, pady=10, sticky=EW)
     novi_putnik_lbl = ttk.Label(novi_putnik_frm, text="Unos novog putnika")
@@ -985,8 +983,8 @@ def rezervisanje():
 
 
 def letovi_do_kraja_dana():
-    """Spisak svih letova do kraja dana iz tabele 'linije', sortiran po
-    vremenu polaska."""
+    """List of all flights until the end of the day from the 'linije' table,
+    sorted by departure time."""
     
     preostali_letovi_df = linije.preostali_letovi()
     
@@ -995,7 +993,7 @@ def letovi_do_kraja_dana():
     do_kraja_dana_tl.attributes("-topmost", "true")
     do_kraja_dana_tl.resizable(0, 0)
     
-    #Naslov.
+    # Title
     do_kraja_dana_lbl = ttk.Label(
         do_kraja_dana_tl,
         text="Spisak letova do kraja dana".upper(),
@@ -1008,7 +1006,8 @@ def letovi_do_kraja_dana():
     do_kraja_dana_lbl.grid(column=0, row=0, padx=20, pady=20, ipadx=10,
                            ipady=10, sticky=EW)
     
-    #Kolone Treeview forme su nazivi kolona tabele 'linije'.
+    # The columns of the Treeview form are the column names of the 'linije'
+    # table
     kolone = preostali_letovi_df.columns.to_list()
     
     preostali_tv = ttk.Treeview(
@@ -1018,7 +1017,7 @@ def letovi_do_kraja_dana():
         height=20
     )
     
-    # Imena zaglavlja.
+    # Header names
     preostali_tv.heading("broj leta", text="Broj leta")
     preostali_tv.heading("tip aviona", text="Tip aviona")
     preostali_tv.heading("destinacija", text="Destinacija")
@@ -1027,7 +1026,7 @@ def letovi_do_kraja_dana():
     preostali_tv.heading("trajanje leta", text="Trajanje")
     preostali_tv.heading("osnovna cena karte", text="Osnovna cena")
     
-    #Širina kolone i pozicija teksta u njoj.
+    # Column width and text position in it
     preostali_tv.column("broj leta", width=50, anchor="center")
     preostali_tv.column("tip aviona", width=130, anchor=W)
     preostali_tv.column("destinacija", width=100, anchor=W)
@@ -1038,7 +1037,7 @@ def letovi_do_kraja_dana():
     
     preostali_tv.grid(column=0, row=1, padx=10, pady=10, ipadx=5, ipady=5)
     
-    #Ubacivanje podataka u tabelu.
+    # Inserting data into a table
     for i in range(len(preostali_letovi_df)):
         indeksi = preostali_letovi_df.index.to_list()
         jedan_red = preostali_letovi_df.loc[indeksi[i]].to_list()
@@ -1047,21 +1046,21 @@ def letovi_do_kraja_dana():
         jedan_red[6] = "%0.2f" % (float(jedan_red[6]))
         preostali_tv.insert("", END, values=jedan_red)
     
-    #Postavljanje skrolbara za Treeview.
+    # Setting a scrollbar for Treeview
     scroll = ttk.Scrollbar(do_kraja_dana_tl, orient="vertical",
                            command=preostali_tv.yview)
     preostali_tv.config(yscrollcommand=scroll.set)
     scroll.grid(column=1, row=1, sticky=NS)
     
-    #Dugme za zatvaranje prozora.
+    # Button to close the window
     izadji_preostali_btn = ttk.Button(do_kraja_dana_tl, text="Izađi",
                                       command=do_kraja_dana_tl.destroy)
     izadji_preostali_btn.grid(column=0, row=2, padx=10, pady=10, sticky=E)
 
 
 def putnici_info():
-    """Prikaz tabele 'putnici', s mogućnošću eksportovanja podataka o njima
-    i grafičkim prikazima pojedinih podataka"""
+    """Display of the 'putnici' table, with the possibility of exporting
+    data about them and graphical representations of some data."""
     
     putnici_tl = Toplevel(root)
     putnici_tl.title("INFORMACIJE O PUTNICIMA")
@@ -1099,11 +1098,11 @@ def putnici_info():
     
     ime_fajla_entry.focus()
 
-    #Deo za grafički prikaz.
+    # Section for graphic representation
     prikaz_frm = ttk.LabelFrame(putnici_tl, text="Grafički prikaz podataka")
     prikaz_frm.grid(column=1, row=0, padx=10, pady=10)
     
-    #Izbor tipa podataka za prikazivanje.
+    # Selection of the type of data to display
     tip_frm = ttk.LabelFrame(prikaz_frm, text="Tip podataka")
     tip_frm.grid(column=0, row=0, padx=10, pady=10)
     
@@ -1121,7 +1120,7 @@ def putnici_info():
                                              padx=5, pady=5, sticky=W)
     var_tip.set("1")
     
-    #Izbor načina prikazivanja podataka.
+    # Choice of data display method
     nacin_frm = ttk.LabelFrame(prikaz_frm, text="Vrsta grafika")
     nacin_frm.grid(column=1, row=0, padx=10, pady=10)
 
@@ -1135,7 +1134,7 @@ def putnici_info():
                                              padx=5, pady=5, sticky=W)
     var_nacin.set("1")
     
-    #Broj podataka za prikazivanje.
+    # Number of data to display
     broj_frm =ttk.LabelFrame(prikaz_frm, text="Broj podataka")
     broj_frm.grid(column=2, row=0, padx=10, pady=10)
 
@@ -1157,7 +1156,7 @@ def putnici_info():
 
 
 def flota_info():
-    """Prikaz informacija o svakom avionu iz flote."""
+    """View information about each aircraft in the fleet."""
     
     flota_tl = Toplevel(root)
     flota_tl.title("INFORMACIJE O RASPOLOŽIVIM AVIONIMA")
@@ -1179,7 +1178,7 @@ def flota_info():
     flota_naslov_lbl.grid(column=0, row=0, padx=20, pady=20, ipadx=10,
                           ipady=10, sticky=EW)
     
-    #Kreiranje slike.
+    # Creating an image
     for i in range(4):
         tip = avioni.avioni_df.tip.iloc[i]
         if tip == "AIRBUS A 330-200":
@@ -1191,12 +1190,12 @@ def flota_info():
         elif tip == "ATR 72-600":
             slika = dimenzije_slike("assets/Atr_72_600.png", 300, 105)
         
-        #Smeštanje slike na formu.
+        # Placing an image on the form
         slika_lbl = ttk.Label(flota_frm, image=slika)
         slika_lbl.slika = slika
         slika_lbl.grid(column=i, row=0, padx=5, pady=5)
         
-        #Ispisivanje tipa aviona.
+        # Printing the aircraft type
         tip_aviona_lbl = ttk.Label(
             flota_frm,
             text=tip,
@@ -1308,9 +1307,9 @@ def flota_info():
 
 
 def spisak_destinacija():
-    """Spisak svih destinacija s nazivom aerodroma, vremenom polaska,
-    trajanjem leta i cenom. Izbor sortiranja spiska po destinaciji, vremenu
-    polaska i trajanju leta. Eksport u excel fajl."""
+    """List of all destinations with airport name, departure time, flight
+    duration and price; choice of sorting the list by destination,
+    departure time and flight duration; export to Excel file."""
     
     dest_df = linije.linije_df.loc[:, ("destinacija", "naziv aerodroma",
                                        "polazak", "trajanje leta",
@@ -1336,7 +1335,7 @@ def spisak_destinacija():
     spisak_frm = ttk.Frame(spisak_tl)
     spisak_frm.grid(column=0, row=1, padx=30, pady=30, sticky=EW)
     
-    #Kolone koje se koriste u Treeview formi.
+    # Columns used in the Treeview form
     lista_kolona = dest_df.columns.to_list()
     
     spisak_tv = ttk.Treeview(
@@ -1346,14 +1345,14 @@ def spisak_destinacija():
         height=10
     )
     
-    #Imena zaglavlja
+    # Header names
     spisak_tv.heading("destinacija", text="Destinacija")
     spisak_tv.heading("naziv aerodroma", text="Naziv aerodroam")
     spisak_tv.heading("polazak", text="Polazak")
     spisak_tv.heading("trajanje leta", text="Trajanje")
     spisak_tv.heading("osnovna cena karte", text="Cena")
     
-    #Širina kolone i pozicija teksta u njoj.
+    # Column width and text position in it
     spisak_tv.column("destinacija", width=100, anchor=W)
     spisak_tv.column("naziv aerodroma", width=170, anchor=W)
     spisak_tv.column("polazak", width=70, anchor="center")
@@ -1363,7 +1362,7 @@ def spisak_destinacija():
     spisak_tv.grid(column=0, row=0, padx=10, pady=10, ipadx=5, ipady=5,
                    columnspan=4)
     
-    # Ubacivanje podataka u tabelu.
+    # Inserting data into a table
     for i in range(len(dest_df)):
         indeksi = dest_df.index.to_list()
         jedan_red = dest_df.loc[indeksi[i]].to_list()
@@ -1372,7 +1371,7 @@ def spisak_destinacija():
         jedan_red[4] = "%0.2f" % (float(jedan_red[4]))
         spisak_tv.insert("", END, values=jedan_red)
         
-    #Postavljanje skrolbara za Treeview.
+    # Setting a scrollbar for Treeview
     scroll = ttk.Scrollbar(
         spisak_frm,
         orient="vertical",
@@ -1381,7 +1380,7 @@ def spisak_destinacija():
     spisak_tv.config(yscrollcommand=scroll.set)
     scroll.grid(column=4, row=0, sticky=NS)
     
-    #Elementi za različiti načini sortiranja.
+    # Elements for different ways of sorting
     sortiranje_lbl = ttk.Label(
         spisak_frm,
         text="Izaberite sortiranje leta po:"
@@ -1411,14 +1410,14 @@ def spisak_destinacija():
     )
     sort_traj_btn.grid(column=3, row=1, padx=5, pady=5)
     
-    #Grafički prikaz za trajanje leta i cene.
+    # Graphic display for flight duration and prices
     graf_frm = ttk.LabelFrame(
         spisak_frm,
         text="Eksportovanje i grafički prikaz"
     )
     graf_frm.grid(column=0, row=2, columnspan=4, padx=30, pady=20, sticky=EW)
 
-    #Deo za eksportovanje tabele u excel, csv ili json format.
+    # Section for exporting the table in Excel, CSV or JSON format
     eksport_spisak_frm = ttk.LabelFrame(
         graf_frm,
         text="Eksportovanje tabele sa destinacijama"
@@ -1460,7 +1459,7 @@ def spisak_destinacija():
     
     var_trajanje_cena.set("1")
     
-    #Izbor kriterijuma za određeni tip podataka.
+    # Selection of criteria for a specific type of data
     krit_frm = ttk.LabelFrame(graf_frm, text="Kriterijum")
     krit_frm.grid(column=2, row=0, padx=10, pady=10)
     
@@ -1484,7 +1483,7 @@ def spisak_destinacija():
     )
     primeni_btn.grid(column=2, row=1, padx=5, pady=10, sticky=E)
 
-    #Dugme za zatvaranje.
+    # Close button
     spisak_izadji_btn = ttk.Button(
         spisak_tl,
         text="Izađi",
@@ -1514,7 +1513,7 @@ naslov_lbl.grid(column=0,
 info_frm = ttk.LabelFrame(root, text="Izbor informacija")
 info_frm.grid(column=0, row=1, padx=20, pady=20, ipady=5, sticky=NS)
 
-#Menjanje stila za velika slova na glavnom ekranu.
+# Style for capital letters on the main screen
 style = ttk.Style()
 style.configure("big.TButton", font=("Arial", 18, "bold"))
 
@@ -1576,7 +1575,7 @@ letovi_frm = ttk.LabelFrame(root, text="Narednih pet letova")
 letovi_frm.grid(column=1, row=1, padx=20, pady=20, ipady=5, sticky=EW)
 
 for i in range(len(linije.indeksi_narednih_letova())):
-    # Podaci iz DataFrama koji su nam potrebni.
+    # Data from the database that we need
     idx = linije.indeksi_narednih_letova()[i]
     broj_leta = linije.linije_df["broj leta"][idx]
     destinacija = linije.linije_df.destinacija[idx]
@@ -1585,7 +1584,7 @@ for i in range(len(linije.indeksi_narednih_letova())):
     polazak = linije.linije_df.polazak[idx]
     polazak_str = polazak.strftime("%H:%M")
     
-    # Smeštanje elemenata na formu.
+    # Placing elements on the form
     jedan_let_frm = ttk.Frame(letovi_frm)
     jedan_let_frm.grid(column=1, row=i, padx=5, pady=5)
     
@@ -1600,7 +1599,7 @@ for i in range(len(linije.indeksi_narednih_letova())):
                                                            sticky=W)
     ttk.Label(jedan_let_frm, text=polazak_str).grid(column=2, row=3, sticky=W)
     
-    # Slika aviona.
+    # Airplane image
     if tip_aviona == "AIRBUS A 330-200":
         slika = dimenzije_slike("assets/Airbus_A_330-200.png", 150, 52)
     elif tip_aviona == "AIRBUS A 320":
@@ -1610,7 +1609,7 @@ for i in range(len(linije.indeksi_narednih_letova())):
     elif tip_aviona == "ATR 72-600":
         slika = dimenzije_slike("assets/Atr_72_600.png", 150, 52)
     
-    # Smeštanje slike na formu.
+    # Placing the image on the form
     slika_lbl = ttk.Label(letovi_frm, image=slika,
                           text=f"Tip aviona: {tip_aviona}", compound="top")
     slika_lbl.slika = slika
